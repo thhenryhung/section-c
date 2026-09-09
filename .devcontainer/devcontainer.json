@@ -1,0 +1,53 @@
+{
+  "name": "Section C",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "postCreateCommand": "npm install",
+  "forwardPorts": [5173],
+  "portsAttributes": {
+    "5173": {
+      "label": "Section C dev server",
+      "onAutoForward": "openPreview"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss"
+      ],
+      "settings": {
+        "editor.formatOnSave": true
+      }
+    },
+
+    // A Codespace's token only reaches the repo it was created from, so running
+    // the real data pipeline would otherwise fail to clone the private repo.
+    // Requesting read access here makes Codespaces prompt for authorisation
+    // instead. Contributors can decline: everything builds against the synthetic
+    // sample roster without it.
+    "codespaces": {
+      "repositories": {
+        "thhenryhung/section-c-data": {
+          "permissions": {
+            "contents": "read"
+          }
+        }
+      }
+    }
+  }
+
+  // Deliberately no SECTION_PASSPHRASE here. Setting it via "remoteEnv" would
+  // shadow a real Codespaces secret of the same name, so a maintainer working on
+  // real section data would silently get the demo value instead of theirs.
+  //
+  // Contributors need nothing: scripts/encrypt-data.ts falls back to "demo" by
+  // itself whenever it is building the synthetic sample roster.
+  //
+  // To work with real data in a Codespace, add SECTION_PASSPHRASE under
+  // Settings -> Secrets and variables -> Codespaces (NOT the Actions tab, which
+  // is a separate store that only workflows can read).
+}
